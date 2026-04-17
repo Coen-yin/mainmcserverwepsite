@@ -5,6 +5,7 @@
   "scripts": {
     "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
 
+    "start": "bash render-start.sh",
     "build": "pnpm run typecheck:libs && pnpm -r --filter \"!./artifacts/techy-mc\" --filter \"!./artifacts/mockup-sandbox\" --if-present run build",
 
     "typecheck:libs": "tsc --build",
