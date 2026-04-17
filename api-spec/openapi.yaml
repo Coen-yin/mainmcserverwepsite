@@ -1,0 +1,2056 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: techy Minecraft Server API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: users
+    description: User operations
+  - name: forums
+    description: Forum operations
+  - name: announcements
+    description: Announcement operations
+  - name: bans
+    description: Ban management
+  - name: appeals
+    description: Ban appeals
+  - name: applications
+    description: Staff applications
+  - name: server
+    description: Server status and stats
+  - name: leaderboard
+    description: Player leaderboards
+  - name: votes
+    description: Vote management
+  - name: gallery
+    description: Gallery images
+  - name: admin
+    description: Admin operations
+  - name: rules
+    description: Server rules
+  - name: store
+    description: Store items
+  - name: changelog
+    description: Changelogs
+  - name: tickets
+    description: Support tickets
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /users/profile:
+    get:
+      operationId: getMyProfile
+      tags: [users]
+      summary: Get current user profile
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+    put:
+      operationId: updateMyProfile
+      tags: [users]
+      summary: Update current user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileBody"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List all users (admin)
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Users list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserListResponse"
+
+  /users/{userId}:
+    get:
+      operationId: getUserById
+      tags: [users]
+      summary: Get user by ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+
+  /users/{userId}/promote:
+    post:
+      operationId: promoteUser
+      tags: [admin]
+      summary: Promote user to staff rank
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PromoteUserBody"
+      responses:
+        "200":
+          description: Promoted user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+
+  /forums/categories:
+    get:
+      operationId: listForumCategories
+      tags: [forums]
+      summary: List all forum categories
+      responses:
+        "200":
+          description: Forum categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ForumCategory"
+    post:
+      operationId: createForumCategory
+      tags: [forums]
+      summary: Create forum category (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateForumCategoryBody"
+      responses:
+        "201":
+          description: Created category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumCategory"
+
+  /forums/threads:
+    get:
+      operationId: listForumThreads
+      tags: [forums]
+      summary: List forum threads
+      parameters:
+        - name: categoryId
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Forum threads
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadListResponse"
+    post:
+      operationId: createForumThread
+      tags: [forums]
+      summary: Create forum thread
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateThreadBody"
+      responses:
+        "201":
+          description: Created thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumThread"
+
+  /forums/threads/{threadId}:
+    get:
+      operationId: getForumThread
+      tags: [forums]
+      summary: Get forum thread with posts
+      parameters:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Forum thread with posts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumThreadDetail"
+    delete:
+      operationId: deleteForumThread
+      tags: [forums]
+      summary: Delete forum thread (admin/author)
+      parameters:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /forums/threads/{threadId}/posts:
+    post:
+      operationId: createForumPost
+      tags: [forums]
+      summary: Create post in thread
+      parameters:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePostBody"
+      responses:
+        "201":
+          description: Created post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumPost"
+
+  /forums/threads/{threadId}/pin:
+    post:
+      operationId: pinForumThread
+      tags: [forums]
+      summary: Pin/unpin forum thread (admin)
+      parameters:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumThread"
+
+  /forums/threads/{threadId}/lock:
+    post:
+      operationId: lockForumThread
+      tags: [forums]
+      summary: Lock/unlock forum thread (admin)
+      parameters:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumThread"
+
+  /forums/posts/{postId}:
+    delete:
+      operationId: deleteForumPost
+      tags: [forums]
+      summary: Delete forum post (admin/author)
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /forums/stats:
+    get:
+      operationId: getForumStats
+      tags: [forums]
+      summary: Get forum statistics
+      responses:
+        "200":
+          description: Forum stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumStats"
+
+  /announcements:
+    get:
+      operationId: listAnnouncements
+      tags: [announcements]
+      summary: List announcements
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Announcements
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnnouncementListResponse"
+    post:
+      operationId: createAnnouncement
+      tags: [announcements]
+      summary: Create announcement (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAnnouncementBody"
+      responses:
+        "201":
+          description: Created announcement
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Announcement"
+
+  /announcements/{announcementId}:
+    get:
+      operationId: getAnnouncement
+      tags: [announcements]
+      summary: Get announcement by ID
+      parameters:
+        - name: announcementId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Announcement
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Announcement"
+    put:
+      operationId: updateAnnouncement
+      tags: [announcements]
+      summary: Update announcement (admin)
+      parameters:
+        - name: announcementId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAnnouncementBody"
+      responses:
+        "200":
+          description: Updated announcement
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Announcement"
+    delete:
+      operationId: deleteAnnouncement
+      tags: [announcements]
+      summary: Delete announcement (admin)
+      parameters:
+        - name: announcementId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /bans:
+    get:
+      operationId: listBans
+      tags: [bans]
+      summary: List active bans
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Bans list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BanListResponse"
+    post:
+      operationId: createBan
+      tags: [bans]
+      summary: Ban a player (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBanBody"
+      responses:
+        "201":
+          description: Created ban
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ban"
+
+  /bans/{banId}/unban:
+    post:
+      operationId: unbanPlayer
+      tags: [bans]
+      summary: Unban a player (admin)
+      parameters:
+        - name: banId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Unbanned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /appeals:
+    get:
+      operationId: listAppeals
+      tags: [appeals]
+      summary: List ban appeals
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, accepted, rejected]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        "200":
+          description: Appeals list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppealListResponse"
+    post:
+      operationId: createAppeal
+      tags: [appeals]
+      summary: Submit a ban appeal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAppealBody"
+      responses:
+        "201":
+          description: Created appeal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appeal"
+
+  /appeals/{appealId}:
+    get:
+      operationId: getAppeal
+      tags: [appeals]
+      summary: Get appeal by ID
+      parameters:
+        - name: appealId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Appeal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appeal"
+
+  /appeals/{appealId}/review:
+    post:
+      operationId: reviewAppeal
+      tags: [appeals]
+      summary: Review a ban appeal (admin)
+      parameters:
+        - name: appealId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewAppealBody"
+      responses:
+        "200":
+          description: Reviewed appeal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appeal"
+
+  /applications:
+    get:
+      operationId: listApplications
+      tags: [applications]
+      summary: List staff applications (admin)
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, accepted, rejected]
+      responses:
+        "200":
+          description: Applications list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationListResponse"
+    post:
+      operationId: createApplication
+      tags: [applications]
+      summary: Submit staff application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateApplicationBody"
+      responses:
+        "201":
+          description: Created application
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffApplication"
+
+  /applications/{applicationId}/review:
+    post:
+      operationId: reviewApplication
+      tags: [applications]
+      summary: Review staff application (admin)
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewApplicationBody"
+      responses:
+        "200":
+          description: Reviewed application
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffApplication"
+
+  /server/status:
+    get:
+      operationId: getServerStatus
+      tags: [server]
+      summary: Get server status and online players
+      responses:
+        "200":
+          description: Server status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerStatus"
+
+  /server/stats:
+    get:
+      operationId: getServerStats
+      tags: [server]
+      summary: Get overall server statistics
+      responses:
+        "200":
+          description: Server stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerStats"
+
+  /leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [leaderboard]
+      summary: Get player leaderboard
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [kills, deaths, playtime, votes, money]
+            default: kills
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Leaderboard
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
+
+  /votes:
+    get:
+      operationId: listVoteSites
+      tags: [votes]
+      summary: List vote sites and user vote status
+      responses:
+        "200":
+          description: Vote sites
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VoteSiteListResponse"
+
+  /votes/record:
+    post:
+      operationId: recordVote
+      tags: [votes]
+      summary: Record a vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecordVoteBody"
+      responses:
+        "201":
+          description: Vote recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /gallery:
+    get:
+      operationId: listGalleryImages
+      tags: [gallery]
+      summary: List gallery images
+      responses:
+        "200":
+          description: Gallery images
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GalleryImage"
+    post:
+      operationId: createGalleryImage
+      tags: [gallery]
+      summary: Add gallery image (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGalleryImageBody"
+      responses:
+        "201":
+          description: Created gallery image
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GalleryImage"
+
+  /gallery/{imageId}:
+    delete:
+      operationId: deleteGalleryImage
+      tags: [gallery]
+      summary: Delete gallery image (admin)
+      parameters:
+        - name: imageId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /rules:
+    get:
+      operationId: listRules
+      tags: [rules]
+      summary: List server rules
+      responses:
+        "200":
+          description: Rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Rule"
+    post:
+      operationId: createRule
+      tags: [rules]
+      summary: Create rule (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRuleBody"
+      responses:
+        "201":
+          description: Created rule
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rule"
+
+  /rules/{ruleId}:
+    put:
+      operationId: updateRule
+      tags: [rules]
+      summary: Update rule (admin)
+      parameters:
+        - name: ruleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRuleBody"
+      responses:
+        "200":
+          description: Updated rule
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rule"
+    delete:
+      operationId: deleteRule
+      tags: [rules]
+      summary: Delete rule (admin)
+      parameters:
+        - name: ruleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /store/items:
+    get:
+      operationId: listStoreItems
+      tags: [store]
+      summary: List store items
+      responses:
+        "200":
+          description: Store items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StoreItem"
+    post:
+      operationId: createStoreItem
+      tags: [store]
+      summary: Create store item (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateStoreItemBody"
+      responses:
+        "201":
+          description: Created store item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreItem"
+
+  /changelog:
+    get:
+      operationId: listChangelogs
+      tags: [changelog]
+      summary: List changelogs
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Changelogs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChangelogListResponse"
+    post:
+      operationId: createChangelog
+      tags: [changelog]
+      summary: Create changelog entry (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChangelogBody"
+      responses:
+        "201":
+          description: Created changelog
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Changelog"
+
+  /tickets:
+    get:
+      operationId: listTickets
+      tags: [tickets]
+      summary: List support tickets
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [open, closed, in_progress]
+      responses:
+        "200":
+          description: Tickets list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TicketListResponse"
+    post:
+      operationId: createTicket
+      tags: [tickets]
+      summary: Create support ticket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTicketBody"
+      responses:
+        "201":
+          description: Created ticket
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+
+  /tickets/{ticketId}:
+    get:
+      operationId: getTicket
+      tags: [tickets]
+      summary: Get ticket by ID
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Ticket
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+
+  /tickets/{ticketId}/close:
+    post:
+      operationId: closeTicket
+      tags: [tickets]
+      summary: Close a ticket (admin)
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Closed ticket
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+
+  /admin/dashboard:
+    get:
+      operationId: getAdminDashboard
+      tags: [admin]
+      summary: Get admin dashboard stats
+      responses:
+        "200":
+          description: Admin dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminDashboard"
+
+  /admin/verify:
+    post:
+      operationId: verifyAdmin
+      tags: [admin]
+      summary: Verify admin password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyAdminBody"
+      responses:
+        "200":
+          description: Verification result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifyAdminResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        clerkUserId:
+          type: string
+        username:
+          type: string
+        displayName:
+          type: string
+        minecraftUsername:
+          type: string
+        bio:
+          type: string
+        rank:
+          type: string
+          enum: [player, vip, mvp, moderator, admin, owner]
+        isAdmin:
+          type: boolean
+        isBanned:
+          type: boolean
+        postCount:
+          type: integer
+        joinedAt:
+          type: string
+        avatarUrl:
+          type: string
+      required:
+        - id
+        - clerkUserId
+        - username
+        - rank
+        - isAdmin
+        - isBanned
+        - postCount
+        - joinedAt
+
+    UpdateProfileBody:
+      type: object
+      properties:
+        displayName:
+          type: string
+        minecraftUsername:
+          type: string
+        bio:
+          type: string
+
+    PromoteUserBody:
+      type: object
+      properties:
+        rank:
+          type: string
+          enum: [player, vip, mvp, moderator, admin]
+      required:
+        - rank
+
+    UserListResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserProfile"
+        total:
+          type: integer
+        page:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - users
+        - total
+        - page
+        - totalPages
+
+    ForumCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        icon:
+          type: string
+        threadCount:
+          type: integer
+        postCount:
+          type: integer
+        lastPost:
+          $ref: "#/components/schemas/ForumPost"
+      required:
+        - id
+        - name
+        - description
+        - threadCount
+        - postCount
+
+    CreateForumCategoryBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        icon:
+          type: string
+      required:
+        - name
+        - description
+
+    ForumThread:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        categoryId:
+          type: integer
+        categoryName:
+          type: string
+        authorId:
+          type: integer
+        authorName:
+          type: string
+        authorRank:
+          type: string
+        replyCount:
+          type: integer
+        viewCount:
+          type: integer
+        isPinned:
+          type: boolean
+        isLocked:
+          type: boolean
+        lastReplyAt:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - title
+        - categoryId
+        - authorId
+        - authorName
+        - replyCount
+        - viewCount
+        - isPinned
+        - isLocked
+        - createdAt
+
+    ThreadListResponse:
+      type: object
+      properties:
+        threads:
+          type: array
+          items:
+            $ref: "#/components/schemas/ForumThread"
+        total:
+          type: integer
+        page:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - threads
+        - total
+        - page
+        - totalPages
+
+    ForumPost:
+      type: object
+      properties:
+        id:
+          type: integer
+        threadId:
+          type: integer
+        authorId:
+          type: integer
+        authorName:
+          type: string
+        authorRank:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - threadId
+        - authorId
+        - authorName
+        - content
+        - createdAt
+
+    ForumThreadDetail:
+      type: object
+      properties:
+        thread:
+          $ref: "#/components/schemas/ForumThread"
+        posts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ForumPost"
+        total:
+          type: integer
+      required:
+        - thread
+        - posts
+        - total
+
+    CreateThreadBody:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        categoryId:
+          type: integer
+      required:
+        - title
+        - content
+        - categoryId
+
+    CreatePostBody:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+
+    ForumStats:
+      type: object
+      properties:
+        totalThreads:
+          type: integer
+        totalPosts:
+          type: integer
+        totalMembers:
+          type: integer
+        newestMember:
+          type: string
+        onlineNow:
+          type: integer
+      required:
+        - totalThreads
+        - totalPosts
+        - totalMembers
+        - onlineNow
+
+    Announcement:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        type:
+          type: string
+          enum: [general, important, update, event]
+        authorName:
+          type: string
+        pinned:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - title
+        - content
+        - type
+        - authorName
+        - pinned
+        - createdAt
+
+    CreateAnnouncementBody:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        type:
+          type: string
+          enum: [general, important, update, event]
+        pinned:
+          type: boolean
+      required:
+        - title
+        - content
+        - type
+
+    AnnouncementListResponse:
+      type: object
+      properties:
+        announcements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Announcement"
+        total:
+          type: integer
+        page:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - announcements
+        - total
+        - page
+        - totalPages
+
+    Ban:
+      type: object
+      properties:
+        id:
+          type: integer
+        playerName:
+          type: string
+        reason:
+          type: string
+        bannedBy:
+          type: string
+        duration:
+          type: string
+        expiresAt:
+          type: string
+        isPermanent:
+          type: boolean
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - playerName
+        - reason
+        - bannedBy
+        - isPermanent
+        - isActive
+        - createdAt
+
+    CreateBanBody:
+      type: object
+      properties:
+        playerName:
+          type: string
+        reason:
+          type: string
+        duration:
+          type: string
+        isPermanent:
+          type: boolean
+      required:
+        - playerName
+        - reason
+
+    BanListResponse:
+      type: object
+      properties:
+        bans:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ban"
+        total:
+          type: integer
+        page:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - bans
+        - total
+        - page
+        - totalPages
+
+    Appeal:
+      type: object
+      properties:
+        id:
+          type: integer
+        playerName:
+          type: string
+        reason:
+          type: string
+        explanation:
+          type: string
+        status:
+          type: string
+          enum: [pending, accepted, rejected]
+        adminNote:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - playerName
+        - reason
+        - explanation
+        - status
+        - createdAt
+
+    CreateAppealBody:
+      type: object
+      properties:
+        playerName:
+          type: string
+        reason:
+          type: string
+        explanation:
+          type: string
+      required:
+        - playerName
+        - reason
+        - explanation
+
+    ReviewAppealBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [accepted, rejected]
+        adminNote:
+          type: string
+      required:
+        - status
+
+    AppealListResponse:
+      type: object
+      properties:
+        appeals:
+          type: array
+          items:
+            $ref: "#/components/schemas/Appeal"
+        total:
+          type: integer
+        page:
+          type: integer
+      required:
+        - appeals
+        - total
+        - page
+
+    StaffApplication:
+      type: object
+      properties:
+        id:
+          type: integer
+        applicantName:
+          type: string
+        position:
+          type: string
+        age:
+          type: integer
+        experience:
+          type: string
+        whyJoin:
+          type: string
+        availability:
+          type: string
+        status:
+          type: string
+          enum: [pending, accepted, rejected]
+        adminNote:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - applicantName
+        - position
+        - age
+        - experience
+        - whyJoin
+        - status
+        - createdAt
+
+    CreateApplicationBody:
+      type: object
+      properties:
+        applicantName:
+          type: string
+        position:
+          type: string
+        age:
+          type: integer
+        experience:
+          type: string
+        whyJoin:
+          type: string
+        availability:
+          type: string
+      required:
+        - applicantName
+        - position
+        - age
+        - experience
+        - whyJoin
+
+    ReviewApplicationBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [accepted, rejected]
+        adminNote:
+          type: string
+      required:
+        - status
+
+    ApplicationListResponse:
+      type: object
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: "#/components/schemas/StaffApplication"
+        total:
+          type: integer
+      required:
+        - applications
+        - total
+
+    ServerStatus:
+      type: object
+      properties:
+        online:
+          type: boolean
+        playerCount:
+          type: integer
+        maxPlayers:
+          type: integer
+        motd:
+          type: string
+        version:
+          type: string
+        onlinePlayers:
+          type: array
+          items:
+            type: string
+      required:
+        - online
+        - playerCount
+        - maxPlayers
+
+    ServerStats:
+      type: object
+      properties:
+        totalPlayers:
+          type: integer
+        totalPlaytime:
+          type: integer
+        totalVotes:
+          type: integer
+        uptime:
+          type: string
+        peakPlayers:
+          type: integer
+        lastWipe:
+          type: string
+      required:
+        - totalPlayers
+        - totalPlaytime
+        - totalVotes
+        - uptime
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        playerName:
+          type: string
+        value:
+          type: integer
+        displayValue:
+          type: string
+      required:
+        - rank
+        - playerName
+        - value
+        - displayValue
+
+    VoteSite:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        url:
+          type: string
+        reward:
+          type: string
+        cooldownHours:
+          type: integer
+        lastVoted:
+          type: string
+        canVote:
+          type: boolean
+      required:
+        - id
+        - name
+        - url
+        - reward
+        - cooldownHours
+        - canVote
+
+    VoteSiteListResponse:
+      type: object
+      properties:
+        sites:
+          type: array
+          items:
+            $ref: "#/components/schemas/VoteSite"
+        totalVotesToday:
+          type: integer
+        myVotesThisMonth:
+          type: integer
+      required:
+        - sites
+        - totalVotesToday
+        - myVotesThisMonth
+
+    RecordVoteBody:
+      type: object
+      properties:
+        siteId:
+          type: integer
+      required:
+        - siteId
+
+    GalleryImage:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string
+        uploadedBy:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - title
+        - imageUrl
+        - uploadedBy
+        - createdAt
+
+    CreateGalleryImageBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string
+      required:
+        - title
+        - imageUrl
+
+    Rule:
+      type: object
+      properties:
+        id:
+          type: integer
+        category:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [minor, moderate, major, permanent]
+        order:
+          type: integer
+      required:
+        - id
+        - category
+        - title
+        - description
+        - severity
+        - order
+
+    CreateRuleBody:
+      type: object
+      properties:
+        category:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [minor, moderate, major, permanent]
+        order:
+          type: integer
+      required:
+        - category
+        - title
+        - description
+        - severity
+
+    StoreItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+          enum: [rank, cosmetic, booster, bundle]
+        featured:
+          type: boolean
+        imageUrl:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - name
+        - description
+        - price
+        - category
+        - featured
+
+    CreateStoreItemBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+          enum: [rank, cosmetic, booster, bundle]
+        featured:
+          type: boolean
+        imageUrl:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - description
+        - price
+        - category
+
+    Changelog:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: string
+        title:
+          type: string
+        changes:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [added, changed, fixed, removed]
+              description:
+                type: string
+            required:
+              - type
+              - description
+        createdAt:
+          type: string
+      required:
+        - id
+        - version
+        - title
+        - changes
+        - createdAt
+
+    CreateChangelogBody:
+      type: object
+      properties:
+        version:
+          type: string
+        title:
+          type: string
+        changes:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [added, changed, fixed, removed]
+              description:
+                type: string
+            required:
+              - type
+              - description
+      required:
+        - version
+        - title
+        - changes
+
+    ChangelogListResponse:
+      type: object
+      properties:
+        changelogs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Changelog"
+        total:
+          type: integer
+        page:
+          type: integer
+      required:
+        - changelogs
+        - total
+        - page
+
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: integer
+        subject:
+          type: string
+        category:
+          type: string
+        message:
+          type: string
+        status:
+          type: string
+          enum: [open, in_progress, closed]
+        submitterName:
+          type: string
+        adminNote:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - subject
+        - category
+        - message
+        - status
+        - submitterName
+        - createdAt
+
+    CreateTicketBody:
+      type: object
+      properties:
+        subject:
+          type: string
+        category:
+          type: string
+          enum: [bug, account, gameplay, other]
+        message:
+          type: string
+        submitterName:
+          type: string
+      required:
+        - subject
+        - category
+        - message
+        - submitterName
+
+    TicketListResponse:
+      type: object
+      properties:
+        tickets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ticket"
+        total:
+          type: integer
+      required:
+        - tickets
+        - total
+
+    AdminDashboard:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        newUsersToday:
+          type: integer
+        activeBans:
+          type: integer
+        pendingAppeals:
+          type: integer
+        pendingApplications:
+          type: integer
+        openTickets:
+          type: integer
+        totalForumPosts:
+          type: integer
+        serverOnline:
+          type: boolean
+        currentPlayers:
+          type: integer
+        totalVotesToday:
+          type: integer
+        recentActivity:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              description:
+                type: string
+              timestamp:
+                type: string
+            required:
+              - type
+              - description
+              - timestamp
+      required:
+        - totalUsers
+        - newUsersToday
+        - activeBans
+        - pendingAppeals
+        - pendingApplications
+        - openTickets
+        - totalForumPosts
+        - serverOnline
+        - currentPlayers
+        - totalVotesToday
+        - recentActivity
+
+    VerifyAdminBody:
+      type: object
+      properties:
+        password:
+          type: string
+      required:
+        - password
+
+    VerifyAdminResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+      required:
+        - valid
