@@ -13,7 +13,4 @@ pnpm run build
 echo "==> Building frontend..."
 BASE_PATH=/ pnpm --filter @workspace/techy-mc run build
 
-echo "==> Running database migrations..."
-pnpm --filter @workspace/db run push-force
-
 echo "==> Build complete!"
