@@ -38746,7 +38746,7 @@ var import_express21 = __toESM(require_express2(), 1);
 var import_cors = __toESM(require_lib3(), 1);
 var import_pino_http = __toESM(require_logger(), 1);
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/underscore-ClYSgvuy.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/underscore-ClYSgvuy.mjs
 function snakeToCamel(str) {
   return str ? str.replace(/([-_][a-z])/g, (match2) => match2.toUpperCase().replace(/-|_/, "")) : "";
 }
@@ -38855,7 +38855,7 @@ var requestToProxyRequest = (req) => {
   });
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/runtimeEnvironment-D1yr0yUs.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/runtimeEnvironment-D1yr0yUs.mjs
 var isTestEnvironment = () => {
   try {
     return process.env.NODE_ENV === "test";
@@ -38871,7 +38871,7 @@ var isProductionEnvironment = () => {
   return false;
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/deprecated--jK9xTNh.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/deprecated--jK9xTNh.mjs
 var displayedWarnings = /* @__PURE__ */ new Set();
 var deprecated = (fnName, warning, key) => {
   const hideWarning = isTestEnvironment() || isProductionEnvironment();
@@ -38882,7 +38882,7 @@ var deprecated = (fnName, warning, key) => {
 ${warning}`);
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/constants-Bta24VLk.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/constants-Bta24VLk.mjs
 var LEGACY_DEV_INSTANCE_SUFFIXES = [
   ".lcl.dev",
   ".lclstage.dev",
@@ -38916,21 +38916,21 @@ var STAGING_FAPI_URL = "https://frontend-api.clerkstage.dev";
 var PROD_FAPI_URL = "https://frontend-api.clerk.dev";
 var DEFAULT_PROXY_PATH = "/__clerk";
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/isomorphicAtob-CoF80qYz.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/isomorphicAtob-CoF80qYz.mjs
 var isomorphicAtob = (data) => {
   if (typeof atob !== "undefined" && typeof atob === "function") return atob(data);
   else if (typeof globalThis.Buffer !== "undefined") return globalThis.Buffer.from(data, "base64").toString();
   return data;
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/isomorphicBtoa-DWmLcIHi.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/isomorphicBtoa-DWmLcIHi.mjs
 var isomorphicBtoa = (data) => {
   if (typeof btoa !== "undefined" && typeof btoa === "function") return btoa(data);
   else if (typeof globalThis.Buffer !== "undefined") return globalThis.Buffer.from(data).toString("base64");
   return data;
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/keys-DuxzP8MU.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/keys-DuxzP8MU.mjs
 var PUBLISHABLE_KEY_LIVE_PREFIX = "pk_live_";
 var PUBLISHABLE_KEY_TEST_PREFIX = "pk_test_";
 function isValidDecodedPublishableKey(decoded) {
@@ -39003,7 +39003,7 @@ var getSuffixedCookieName = (cookieName, cookieSuffix) => {
   return `${cookieName}_${cookieSuffix}`;
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/retry-DqRIhHV5.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/retry-DqRIhHV5.mjs
 var defaultOptions = {
   initialDelay: 125,
   maxDelayBetweenRetries: 0,
@@ -39054,7 +39054,7 @@ var retry = async (callback, options = {}) => {
   }
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/url-C6gPMFx5.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/url-C6gPMFx5.mjs
 function isLegacyDevAccountPortalOrigin(host) {
   return LEGACY_DEV_INSTANCE_SUFFIXES.some((legacyDevSuffix) => {
     return host.startsWith("accounts.") && host.endsWith(legacyDevSuffix);
@@ -39066,7 +39066,7 @@ function isCurrentDevAccountPortalOrigin(host) {
   });
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/clerkRuntimeError-DqAmLuLY.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/clerkRuntimeError-DqAmLuLY.mjs
 function createErrorTypeGuard(ErrorClass) {
   function typeGuard(error40) {
     const target = error40 ?? this;
@@ -39131,7 +39131,7 @@ var ClerkRuntimeError = class ClerkRuntimeError2 extends ClerkError {
 };
 var isClerkRuntimeError = createErrorTypeGuard(ClerkRuntimeError);
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/error-NXMTfCAv.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/error-NXMTfCAv.mjs
 var ClerkAPIError = class {
   static kind = "ClerkAPIError";
   code;
@@ -39732,13 +39732,13 @@ var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot
 var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
 var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/buildAccountsBaseUrl.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/buildAccountsBaseUrl.mjs
 function buildAccountsBaseUrl(frontendApi) {
   if (!frontendApi) return "";
   return `https://${frontendApi.replace(/clerk\.accountsstage\./, "accountsstage.").replace(/clerk\.accounts\.|clerk\./, "accounts.")}`;
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/authorization-Un7v7f6J.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/authorization-Un7v7f6J.mjs
 var TYPES_TO_OBJECTS = {
   strict_mfa: {
     afterMinutes: 10,
@@ -39870,7 +39870,7 @@ var createCheckAuthorization = (options) => {
   };
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/jwtPayloadParser.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/jwtPayloadParser.mjs
 var parsePermissions = ({ per, fpm }) => {
   if (!per || !fpm) return {
     permissions: [],
@@ -39940,7 +39940,7 @@ var __experimental_JWTPayloadToAuthObjectProperties = (claims) => {
   };
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/pathToRegexp-7eww5BY6.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/pathToRegexp-7eww5BY6.mjs
 function _(r) {
   for (var n = [], e = 0; e < r.length; ) {
     var a = r[e];
@@ -46069,7 +46069,7 @@ function withLegacyReturn(cb) {
   };
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/telemetry-DE2JFEBf.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/telemetry-DE2JFEBf.mjs
 var DEFAULT_CACHE_TTL_MS = 864e5;
 var TelemetryEventThrottler = class {
   #cache;
@@ -46594,7 +46594,7 @@ async function clerkFrontendApiProxy(request, options) {
   }
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/proxy-BcfViKjn.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/proxy-BcfViKjn.mjs
 function isValidProxyUrl(key) {
   if (!key) return true;
   return isHttpOrHttps(key) || isProxyUrlRelative(key);
@@ -46606,7 +46606,7 @@ function isProxyUrlRelative(key) {
   return key.startsWith("/");
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.8.2/node_modules/@clerk/shared/dist/runtime/handleValueOrFn-iAIjw-kJ.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/handleValueOrFn-iAIjw-kJ.mjs
 function handleValueOrFn(value, url2, defaultValue) {
   if (typeof value === "function") return value(url2);
   if (typeof value !== "undefined") return value;
@@ -70508,7 +70508,7 @@ router8.get("/status", async (_req, res) => {
     online: true,
     playerCount: Math.floor(Math.random() * 30) + 5,
     maxPlayers: 100,
-    motd: "Welcome to Techy - The Ultimate Minecraft Experience!",
+    motd: "Welcome to techy - The Ultimate Minecraft Experience!",
     version: "1.21.4",
     onlinePlayers: ["Steve123", "CreeperKing", "DiamondMiner", "RedstoneWiz", "BuilderPro"].slice(0, Math.floor(Math.random() * 5) + 1)
   });
