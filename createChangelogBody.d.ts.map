@@ -1,0 +1,1 @@
+{"version":3,"file":"createChangelogBody.d.ts","sourceRoot":"","sources":["../../../src/generated/types/createChangelogBody.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AACH,OAAO,KAAK,EAAE,8BAA8B,EAAE,MAAM,kCAAkC,CAAC;AAEvF,MAAM,WAAW,mBAAmB;IAClC,OAAO,EAAE,MAAM,CAAC;IAChB,KAAK,EAAE,MAAM,CAAC;IACd,OAAO,EAAE,8BAA8B,EAAE,CAAC;CAC3C"}

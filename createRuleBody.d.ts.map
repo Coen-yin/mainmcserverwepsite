@@ -1,0 +1,1 @@
+{"version":3,"file":"createRuleBody.d.ts","sourceRoot":"","sources":["../../../src/generated/types/createRuleBody.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AACH,OAAO,KAAK,EAAE,sBAAsB,EAAE,MAAM,0BAA0B,CAAC;AAEvE,MAAM,WAAW,cAAc;IAC7B,QAAQ,EAAE,MAAM,CAAC;IACjB,KAAK,EAAE,MAAM,CAAC;IACd,WAAW,EAAE,MAAM,CAAC;IACpB,QAAQ,EAAE,sBAAsB,CAAC;IACjC,KAAK,CAAC,EAAE,MAAM,CAAC;CAChB"}
