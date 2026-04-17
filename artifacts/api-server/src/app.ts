@@ -36,9 +36,7 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(clerkMiddleware());
-
-app.use("/api", router);
+app.use("/api", clerkMiddleware(), router);
 
 // Serve frontend static files in production
 const frontendDist = path.resolve(__dirname, "../../techy-mc/dist/public");

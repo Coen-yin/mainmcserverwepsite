@@ -1,0 +1,88 @@
+> pnpm run typecheck:libs && pnpm -r --filter "!./artifacts/techy-mc" --filter "!./artifacts/mockup-sandbox" --if-present run build
+> workspace@0.0.0 typecheck:libs /opt/render/project/src
+> tsc --build
+==> Building frontend...
+> @workspace/techy-mc@0.0.0 build /opt/render/project/src/artifacts/techy-mc
+> vite build --config vite.config.ts
+vite v7.3.1 building client environment for production...
+transforming...
+src/components/ui/tooltip.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/label.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/select.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/sheet.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/dropdown-menu.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+✓ 1923 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/public/index.html                   0.74 kB │ gzip:   0.42 kB
+dist/public/assets/index-D0IFEbJO.css  149.65 kB │ gzip:  22.89 kB
+dist/public/assets/index-oU8QZGEk.js   644.64 kB │ gzip: 180.11 kB
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.13s
+==> Build complete!
+==> Uploading build...
+==> Uploaded in 4.2s. Compression took 5.0s
+==> Build successful 🎉
+==> Deploying...
+==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+==> Running 'npm start'
+> workspace@0.0.0 start
+> bash render-start.sh
+==> Running database migrations...
+> @workspace/db@0.0.0 push-force /opt/render/project/src/lib/db
+> drizzle-kit push --force --config ./drizzle.config.ts
+Reading config file '/opt/render/project/src/lib/db/drizzle.config.ts'
+Using 'pg' driver for database querying
+[⣷] Pulling schema from database...
+(node:93) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[⣯] Pulling schema from database...
+[⣟] Pulling schema from database...
+[⡿] Pulling schema from database...
+[⢿] Pulling schema from database...
+[⣻] Pulling schema from database...
+[⣽] Pulling schema from database...
+[⣷] Pulling schema from database...
+[✓] Pulling schema from database...
+[✓] Changes applied
+==> Starting server...
+{"level":30,"time":1776467410980,"pid":121,"hostname":"srv-d7hbj08sfn5c73e6kg60-hibernate-7dc8bd867b-z4fkt","port":10000,"msg":"Server listening"}
+{"level":30,"time":1776467411172,"pid":121,"hostname":"srv-d7hbj08sfn5c73e6kg60-hibernate-7dc8bd867b-z4fkt","req":{"id":1,"method":"HEAD","url":"/"},"res":{"statusCode":500},"err":{"type":"Error","message":"failed with status code 500","stack":"Error: failed with status code 500\n    at onResFinished (/opt/render/project/src/node_modules/.pnpm/pino-http@10.5.0/node_modules/pino-http/logger.js:115:39)\n    at ServerResponse.onResponseComplete (/opt/render/project/src/node_modules/.pnpm/pino-http@10.5.0/node_modules/pino-http/logger.js:178:14)\n    at ServerResponse.emit (node:events:531:35)\n    at onFinish (node:_http_outgoing:1082:10)\n    at afterWrite (node:internal/streams/writable:710:5)\n    at afterWriteTick (node:internal/streams/writable:696:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)"},"responseTime":45,"msg":"request errored"}
+Error: Publishable key is missing. Ensure that your publishable key is correctly configured. Double-check your environment configuration for your keys, or access them here: https://dashboard.clerk.com/last-active?path=api-keys
+    at parsePublishableKey (/opt/render/project/src/node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/src/keys.ts:95:13)
+    at assertValidPublishableKey (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/util/optionsAssertions.ts:12:3)
+    at AuthenticateContext.initPublishableKeyValues (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/authenticateContext.ts:256:5)
+    at new AuthenticateContext (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/authenticateContext.ts:80:12)
+    at createAuthenticateContext (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/authenticateContext.ts:396:10)
+    at authenticateRequest (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/request.ts:151:37)
+    at Proxy.authenticateRequest22 (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/factory.ts:55:12)
+    at authenticateRequest (/opt/render/project/src/node_modules/.pnpm/@clerk+express@2.1.4_express@5.2.1/node_modules/@clerk/express/src/authenticateRequest.ts:52:22)
+    at middleware (/opt/render/project/src/node_modules/.pnpm/@clerk+express@2.1.4_express@5.2.1/node_modules/@clerk/express/src/authenticateRequest.ts:183:34)
+    at <anonymous> (/opt/render/project/src/node_modules/.pnpm/@clerk+express@2.1.4_express@5.2.1/node_modules/@clerk/express/src/clerkMiddleware.ts:28:5)
+==> Your service is live 🎉
+==> 
+==> ///////////////////////////////////////////////////////////
+==> 
+==> Available at your primary URL https://vortexsmp.onrender.com
+==> 
+==> ///////////////////////////////////////////////////////////
+{"level":30,"time":1776467418711,"pid":121,"hostname":"srv-d7hbj08sfn5c73e6kg60-hibernate-7dc8bd867b-z4fkt","req":{"id":2,"method":"GET","url":"/"},"res":{"statusCode":500},"err":{"type":"Error","message":"failed with status code 500","stack":"Error: failed with status code 500\n    at onResFinished (/opt/render/project/src/node_modules/.pnpm/pino-http@10.5.0/node_modules/pino-http/logger.js:115:39)\n    at ServerResponse.onResponseComplete (/opt/render/project/src/node_modules/.pnpm/pino-http@10.5.0/node_modules/pino-http/logger.js:178:14)\n    at ServerResponse.emit (node:events:531:35)\n    at onFinish (node:_http_outgoing:1082:10)\n    at callback (node:internal/streams/writable:766:21)\n    at afterWrite (node:internal/streams/writable:710:5)\n    at afterWriteTick (node:internal/streams/writable:696:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)"},"responseTime":3,"msg":"request errored"}
+Error: Publishable key is missing. Ensure that your publishable key is correctly configured. Double-check your environment configuration for your keys, or access them here: https://dashboard.clerk.com/last-active?path=api-keys
+    at parsePublishableKey (/opt/render/project/src/node_modules/.pnpm/@clerk+shared@4.8.2_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/src/keys.ts:95:13)
+    at assertValidPublishableKey (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/util/optionsAssertions.ts:12:3)
+    at AuthenticateContext.initPublishableKeyValues (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/authenticateContext.ts:256:5)
+    at new AuthenticateContext (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/authenticateContext.ts:80:12)
+    at createAuthenticateContext (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/authenticateContext.ts:396:10)
+    at authenticateRequest (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/request.ts:151:37)
+    at Proxy.authenticateRequest22 (/opt/render/project/src/node_modules/.pnpm/@clerk+backend@3.2.12/node_modules/@clerk/backend/src/tokens/factory.ts:55:12)
+    at authenticateRequest (/opt/render/project/src/node_modules/.pnpm/@clerk+express@2.1.4_express@5.2.1/node_modules/@clerk/express/src/authenticateRequest.ts:52:22)
+    at middleware (/opt/render/project/src/node_modules/.pnpm/@clerk+express@2.1.4_express@5.2.1/node_modules/@clerk/express/src/authenticateRequest.ts:183:34)
+    at <anonymous> (/opt/render/project/src/node_modules/.pnpm/@clerk+express@2.1.4_express@5.2.1/node_modules/@clerk/express/src/clerkMiddleware.ts:28:5)
