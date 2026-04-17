@@ -1,4 +1,4 @@
-import express, { type Express } from "express";
+import express, { type Express, type RequestHandler } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
 import path from "path";
@@ -36,7 +36,19 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", clerkMiddleware(), router);
+// Only activate Clerk middleware when the secret key is present.
+// Without it every API request would crash with "Publishable key is missing".
+// The backend reuses VITE_CLERK_PUBLISHABLE_KEY (same key, different prefix).
+const clerkHandler: RequestHandler = process.env.CLERK_SECRET_KEY
+  ? clerkMiddleware({
+      secretKey: process.env.CLERK_SECRET_KEY,
+      publishableKey:
+        process.env.CLERK_PUBLISHABLE_KEY ??
+        process.env.VITE_CLERK_PUBLISHABLE_KEY,
+    })
+  : (_req, _res, next) => next();
+
+app.use("/api", clerkHandler, router);
 
 // Serve frontend static files in production
 const frontendDist = path.resolve(__dirname, "../../techy-mc/dist/public");

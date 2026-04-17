@@ -70838,7 +70838,11 @@ app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
 app.use((0, import_cors.default)({ credentials: true, origin: true }));
 app.use(import_express21.default.json());
 app.use(import_express21.default.urlencoded({ extended: true }));
-app.use("/api", clerkMiddleware(), routes_default);
+var clerkHandler = process.env.CLERK_SECRET_KEY ? clerkMiddleware({
+  secretKey: process.env.CLERK_SECRET_KEY,
+  publishableKey: process.env.CLERK_PUBLISHABLE_KEY ?? process.env.VITE_CLERK_PUBLISHABLE_KEY
+}) : (_req, _res, next) => next();
+app.use("/api", clerkHandler, routes_default);
 var frontendDist = path.resolve(__dirname, "../../techy-mc/dist/public");
 if (fs.existsSync(frontendDist)) {
   app.use(import_express21.default.static(frontendDist));
