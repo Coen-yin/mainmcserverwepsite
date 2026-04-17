@@ -1,0 +1,1 @@
+{"version":3,"file":"voteSiteListResponse.d.ts","sourceRoot":"","sources":["../../../src/generated/types/voteSiteListResponse.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AACH,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,YAAY,CAAC;AAE3C,MAAM,WAAW,oBAAoB;IACnC,KAAK,EAAE,QAAQ,EAAE,CAAC;IAClB,eAAe,EAAE,MAAM,CAAC;IACxB,gBAAgB,EAAE,MAAM,CAAC;CAC1B"}

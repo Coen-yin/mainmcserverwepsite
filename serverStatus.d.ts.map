@@ -1,0 +1,1 @@
+{"version":3,"file":"serverStatus.d.ts","sourceRoot":"","sources":["../../../src/generated/types/serverStatus.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AAEH,MAAM,WAAW,YAAY;IAC3B,MAAM,EAAE,OAAO,CAAC;IAChB,WAAW,EAAE,MAAM,CAAC;IACpB,UAAU,EAAE,MAAM,CAAC;IACnB,IAAI,CAAC,EAAE,MAAM,CAAC;IACd,OAAO,CAAC,EAAE,MAAM,CAAC;IACjB,aAAa,CAAC,EAAE,MAAM,EAAE,CAAC;CAC1B"}
