@@ -2,16 +2,16 @@
 set -e
 
 echo "==> Installing pnpm..."
-npm install -g pnpm
+npm install -g pnpm@latest
 
 echo "==> Installing dependencies..."
-pnpm install --frozen-lockfile
+pnpm install --no-frozen-lockfile
+
+echo "==> Building lib packages and API server..."
+pnpm run build
 
 echo "==> Building frontend..."
 BASE_PATH=/ pnpm --filter @workspace/techy-mc run build
-
-echo "==> Building API server..."
-pnpm --filter @workspace/api-server run build
 
 echo "==> Running database migrations..."
 pnpm --filter @workspace/db run push-force
