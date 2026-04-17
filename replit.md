@@ -44,7 +44,25 @@ Full-featured Minecraft server website for the "techy" server. Built with React 
 - Support tickets
 - Admin panel with full control: users, bans, appeals, applications, announcements, forums, gallery, rules, store, changelog, tickets
 
-## Key Commands
+## Render Deployment
+
+The project is set up to deploy as a **single web service** on Render. The Express API server serves both the API and the built React frontend.
+
+### Files for Render
+- `render.yaml` — Blueprint config (web service + PostgreSQL database)
+- `render-build.sh` — Build script (installs, builds frontend + API, runs DB migrations)
+
+### Steps to deploy on Render
+1. Push this repo to GitHub
+2. Go to [render.com](https://render.com) → New → **Blueprint**
+3. Connect your GitHub repo — Render will detect `render.yaml` automatically
+4. Set the required environment variables:
+   - `VITE_CLERK_PUBLISHABLE_KEY` — from [dashboard.clerk.com](https://dashboard.clerk.com) (starts with `pk_live_`)
+   - `CLERK_SECRET_KEY` — from Clerk dashboard (starts with `sk_live_`)
+   - `VITE_CLERK_PROXY_URL` — set to `https://YOUR-APP-NAME.onrender.com/api/__clerk` after first deploy
+5. Deploy! Render will provision a free PostgreSQL database, build everything, and start the server.
+
+### Key Commands
 
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
